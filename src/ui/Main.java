@@ -20,21 +20,22 @@ public class Main {
 
 	public static void main(String[] args) throws IOException {
 		output= new ArrayList<String>();
-		booksPrices =new ArrayList<Integer>();
+		booksPrices =new ArrayList<Integer>();		
 		
-		//bw.write("indique la cantidad de libros disponibles");
-		bw.flush();
-		String books=br.readLine();
+		String books= br.readLine(); 
+		int numberBooks=0;
 		
-		if (books!=null) {
-			int numberBooks=Integer.parseInt(books);		
-		}		
+		while (books!=null) {//Busca the EOF (End of file)
+			if (!books.isEmpty()) {
+				numberBooks=Integer.parseInt(books);
+				receiveBooksPrices();
+				findBooks();			
+			}
+			//Se debe usar el atajo ctr< + z para indicarle a la consola que termino la entrada.
+			books=br.readLine();					
+		}
 		
-		receiveBooksPrices();
-		
-		//bw.write("indique la cantidad de dinero disponibles");
-		bw.flush();
-		findBooks();
+		System.out.println(showOut());
 		
 		br.close();
 		bw.close();
@@ -44,14 +45,12 @@ public class Main {
 	public static void receiveBooksPrices() {
 		String line;
 		try {
-			
 			line=br.readLine();
-			if (line!=null) {
+			if (!line.isEmpty() && line!=null) {
 				String []parts= line.split(SPLIT);
 				stringToInteger(parts);
-				System.out.println("Lo puse en el array de String");
-			}		
-			
+				//System.out.println("Lo puse en el array de String");
+			}			
 		}catch (IOException e){
 			System.out.println("Something went wrong");
 			e.printStackTrace();
@@ -63,7 +62,7 @@ public class Main {
 			Integer []bPrices = new Integer [words.length];
 			for (int i=0;i<bPrices.length;i++) {
 				bPrices[i]=Integer.parseInt(words[i]);
-				System.out.println("string to integer: "+bPrices[i]);				
+				//System.out.println("string to integer: "+bPrices[i]);				
 			}
 			
 			sortPrices(bPrices);
@@ -82,118 +81,134 @@ public class Main {
 			booksPrices.add(prices.get(i));
 		}		
 		
-		System.out.println(Arrays.toString(prices.toArray()));		
+		//System.out.println(Arrays.toString(prices.toArray()));		
 	}
-	
-	
-	/*
-	 * Me falta el método de busqueda binaria
-	 * la salida
-	 * comprobar si funciona
-	 */
-	
-	public static void findBooks() throws IOException{
-		int money = Integer.parseInt(br.readLine()); 
 		
-		Integer [] bookPricesInOrder = new Integer[booksPrices.size()];
-		bookPricesInOrder = booksPrices.toArray(bookPricesInOrder);
+	public static void findBooks() {
+		String amountMoney;
 		
-		
-		boolean found =false;
-	
-		//Los números del primer recorrido
-		int num1=0;
-		int num2=0;
-		int difference=0;
-		
-		int n1=0;
-		int n2=0;
-	
-		
-		
-		
-		int menor=0;
-		int nm1=0;
-		int nm2=0;
-		
-		
-		
-		for (int j=0;j<bookPricesInOrder.length && !found;j++) {
+		try {
+			amountMoney=br.readLine();
 			
-			num1 = bookPricesInOrder[j];
-			
-			for (int k=1;k<bookPricesInOrder.length && !found && k!=j;k++) {
+			if (!amountMoney.isEmpty()) {
+				int money = Integer.parseInt(amountMoney);			
+
 				
-				if (num1+ bookPricesInOrder[k]==money) {
-					found=true;
-					num2=bookPricesInOrder[k];
-					
-					if (num1>num2) {
-						difference= num1-num2;
-					}else {
-						difference = num2-num1;
-					}
-				}
-			}			
-		}
-		
-		
-		//System.out.println("Asignacion de num1= "+num1);
-		//System.out.println("Asignacion de num2= "+num2);
-		//System.out.println("Asignacion de difference= "+difference);
-		
-		for (int i=0;i<bookPricesInOrder.length ;i++) {
-			//System.out.println("***Entre al ciclo");
-			found=false;
-			int start =0;
-			int end=bookPricesInOrder.length-1;			
-			nm1= bookPricesInOrder[i];
+				Integer [] bookPricesInOrder = new Integer[booksPrices.size()];
+				bookPricesInOrder = booksPrices.toArray(bookPricesInOrder);
+				
+				
+				boolean found =false;
 			
-			//System.out.println("Asignacion de num1= "+n1+"\n");
-			while (start<end && !found) {
-				//System.out.println("Estaba true pero lo cambie a false"+"\n");
-				int middle = (start+end)/2;
-				nm2=bookPricesInOrder[middle];
-				//System.out.println("Asignacion de middle= "+middle+"\n");
-				if (nm1+nm2>money) {
-					end=middle-1;
+				//Los números del primer recorrido
+				int num1=0;
+				int num2=0;
+				int difference=0;
+				
+				int n1=0;
+				int n2=0;
+			
+				
+				
+				
+				int menor=0;
+				int nm1=0;
+				int nm2=0;
+				
+				
+				
+				for (int j=0;j<bookPricesInOrder.length && !found;j++) {
 					
-				}else if (nm1+nm2<money) {
-					start=middle+1;
+					num1 = bookPricesInOrder[j];
 					
-				}else if (nm1+nm2==money) {
-					//System.out.println("***Encontre otra suma que da igual a money"+"\n");
-					found=true;
-					
-					
-					n1=nm1;
-					n2=nm2;	
-					
-					//System.out.println("++++Asignacion de nm1= "+nm1+"\n");
-					//System.out.println("++++Asignacion de nm2= "+nm2+"\n");
-					if (n1>n2) {
-						menor=n1-n2;
-					}else {
-						menor=n2-n1;
-					}					
-					
-					
-					if (menor<difference ) {
-						//n1=nm1;
-						//n2=nm2;
-						difference=menor;
-						output.add("Peter should buy books whose prices are "+n1+" and "+n2);
-						System.out.println("Peter should buy books whose prices are "+n1+" and "+n2);		
-					}
+					for (int k=1;k<bookPricesInOrder.length && !found && k!=j;k++) {
+						
+						if (num1+ bookPricesInOrder[k]==money) {
+							found=true;
+							num2=bookPricesInOrder[k];
+							
+							if (num1>num2) {
+								difference= num1-num2;
+							}else {
+								difference = num2-num1;
+							}
+						}
+					}			
 				}
+				
+				
+				//System.out.println("Asignacion de num1= "+num1);
+				//System.out.println("Asignacion de num2= "+num2);
+				//System.out.println("Asignacion de difference= "+difference);
+				
+				for (int i=0;i<bookPricesInOrder.length ;i++) {
+					//System.out.println("***Entre al ciclo");
+					found=false;
+					int start =0;
+					int end=bookPricesInOrder.length-1;			
+					nm1= bookPricesInOrder[i];
+					
+					//System.out.println("Asignacion de num1= "+n1+"\n");
+					while (start<end && !found) {
+						//System.out.println("Estaba true pero lo cambie a false"+"\n");
+						int middle = (start+end)/2;
+						nm2=bookPricesInOrder[middle];
+						//System.out.println("Asignacion de middle= "+middle+"\n");
+						if (nm1+nm2>money) {
+							end=middle-1;
+							
+						}else if (nm1+nm2<money) {
+							start=middle+1;
+							
+						}else if (nm1+nm2==money) {
+							//System.out.println("***Encontre otra suma que da igual a money"+"\n");
+							found=true;
+							
+							
+							n1=nm1;
+							n2=nm2;	
+							
+							//System.out.println("++++Asignacion de nm1= "+nm1+"\n");
+							//System.out.println("++++Asignacion de nm2= "+nm2+"\n");
+							if (n1>n2) {
+								menor=n1-n2;
+							}else {
+								menor=n2-n1;
+							}					
+							
+							
+							if (menor<difference ) {
+								//n1=nm1;
+								//n2=nm2;
+								difference=menor;
+								output.add("Peter should buy books whose prices are "+n1+" and "+n2);
+								//System.out.println("Peter should buy books whose prices are "+n1+" and "+n2);		
+							}
+						}
+					}
+					
+				}
+				
+				if (found == true) {
+					output.add("Peter should buy books whose prices are "+n1+" and "+n2);
+					//System.out.println("Peter should buy books whose prices are "+n1+" and "+n2);			
+				}				
 			}
 			
+		}catch (IOException e) {
+			System.out.println("Something went wrong");
+			e.printStackTrace();
 		}
 		
-		if (found == true) {
-			output.add("Peter should buy books whose prices are "+n1+" and "+n2);
-			System.out.println("Peter should buy books whose prices are "+n1+" and "+n2);			
-		}
 	}	
 
+	
+	
+	public static String showOut() {
+		String message="";
+		for (int i=0;i<output.size();i++) {
+			message+=output.get(i)+"\n";
+		}
+		return message;
+	}
 }

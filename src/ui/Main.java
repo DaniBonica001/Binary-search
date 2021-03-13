@@ -31,7 +31,7 @@ public class Main {
 				receiveBooksPrices();
 				findBooks();			
 			}
-			//Se debe usar el atajo ctr< + z para indicarle a la consola que termino la entrada.
+			//Se debe usar el atajo ctrl + z para indicarle a la consola que termino la entrada.
 			books=br.readLine();					
 		}
 		
@@ -48,9 +48,9 @@ public class Main {
 			line=br.readLine();
 			if (!line.isEmpty() && line!=null) {
 				String []parts= line.split(SPLIT);
-				stringToInteger(parts);
-				//System.out.println("Lo puse en el array de String");
-			}			
+				stringToInteger(parts);				
+			}		
+			
 		}catch (IOException e){
 			System.out.println("Something went wrong");
 			e.printStackTrace();
@@ -61,13 +61,10 @@ public class Main {
 		if (words!=null) {
 			Integer []bPrices = new Integer [words.length];
 			for (int i=0;i<bPrices.length;i++) {
-				bPrices[i]=Integer.parseInt(words[i]);
-				//System.out.println("string to integer: "+bPrices[i]);				
-			}
-			
+				bPrices[i]=Integer.parseInt(words[i]);						
+			}			
 			sortPrices(bPrices);
-		}
-		
+		}		
 	}
 	
 	
@@ -79,9 +76,7 @@ public class Main {
 		booksPrices.clear();
 		for (int i=0;i<prices.size();i++) {
 			booksPrices.add(prices.get(i));
-		}		
-		
-		//System.out.println(Arrays.toString(prices.toArray()));		
+		}	
 	}
 		
 	public static void findBooks() {
@@ -93,10 +88,9 @@ public class Main {
 			if (!amountMoney.isEmpty()) {
 				int money = Integer.parseInt(amountMoney);			
 
-				
+			
 				Integer [] bookPricesInOrder = new Integer[booksPrices.size()];
-				bookPricesInOrder = booksPrices.toArray(bookPricesInOrder);
-				
+				bookPricesInOrder = booksPrices.toArray(bookPricesInOrder);				
 				
 				boolean found =false;
 			
@@ -108,9 +102,6 @@ public class Main {
 				int n1=0;
 				int n2=0;
 			
-				
-				
-				
 				int menor=0;
 				int nm1=0;
 				int nm2=0;
@@ -136,24 +127,20 @@ public class Main {
 					}			
 				}
 				
+				boolean exit=false;
+								
+				for (int i=0;i<bookPricesInOrder.length && !exit ;i++) {
 				
-				//System.out.println("Asignacion de num1= "+num1);
-				//System.out.println("Asignacion de num2= "+num2);
-				//System.out.println("Asignacion de difference= "+difference);
-				
-				for (int i=0;i<bookPricesInOrder.length ;i++) {
-					//System.out.println("***Entre al ciclo");
 					found=false;
 					int start =0;
 					int end=bookPricesInOrder.length-1;			
 					nm1= bookPricesInOrder[i];
 					
-					//System.out.println("Asignacion de num1= "+n1+"\n");
-					while (start<end && !found) {
-						//System.out.println("Estaba true pero lo cambie a false"+"\n");
+					while (start<=end && !found) {
+						
 						int middle = (start+end)/2;
 						nm2=bookPricesInOrder[middle];
-						//System.out.println("Asignacion de middle= "+middle+"\n");
+					
 						if (nm1+nm2>money) {
 							end=middle-1;
 							
@@ -161,15 +148,12 @@ public class Main {
 							start=middle+1;
 							
 						}else if (nm1+nm2==money) {
-							//System.out.println("***Encontre otra suma que da igual a money"+"\n");
-							found=true;
 							
+							found=true;						
 							
 							n1=nm1;
 							n2=nm2;	
 							
-							//System.out.println("++++Asignacion de nm1= "+nm1+"\n");
-							//System.out.println("++++Asignacion de nm2= "+nm2+"\n");
 							if (n1>n2) {
 								menor=n1-n2;
 							}else {
@@ -177,37 +161,32 @@ public class Main {
 							}					
 							
 							
-							if (menor<difference ) {
-								//n1=nm1;
-								//n2=nm2;
+							if (menor<difference && menor!=0 ) {							
 								difference=menor;
-								output.add("Peter should buy books whose prices are "+n1+" and "+n2);
-								//System.out.println("Peter should buy books whose prices are "+n1+" and "+n2);		
+								output.add("Peter should buy books whose prices are "+n1+" and "+n2+".");										
+							}else if (menor==difference) {								
+								exit=true;
+								output.add("Peter should buy books whose prices are "+n1+" and "+n2+".");								
+							}else if (difference<menor) {								
+								exit=true;
+								output.add("Peter should buy books whose prices are "+num1+" and "+num2+".");
 							}
 						}
-					}
-					
-				}
-				
-				if (found == true) {
-					output.add("Peter should buy books whose prices are "+n1+" and "+n2);
-					//System.out.println("Peter should buy books whose prices are "+n1+" and "+n2);			
-				}				
+					}					
+				}					
 			}
 			
 		}catch (IOException e) {
 			System.out.println("Something went wrong");
 			e.printStackTrace();
-		}
-		
+		}		
 	}	
-
 	
 	
 	public static String showOut() {
 		String message="";
 		for (int i=0;i<output.size();i++) {
-			message+=output.get(i)+"\n";
+			message+="\n"+output.get(i)+"\n";
 		}
 		return message;
 	}

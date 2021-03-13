@@ -23,7 +23,9 @@ public class Main {
 		booksPrices =new ArrayList<Integer>();		
 		
 		String books= br.readLine(); 
-		int numberBooks=0;
+		@SuppressWarnings("unused")
+		int numberBooks=1;
+		
 		
 		while (books!=null) {//Busca the EOF (End of file)
 			if (!books.isEmpty()) {

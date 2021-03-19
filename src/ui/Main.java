@@ -19,6 +19,7 @@ public class Main {
 	public final static BufferedWriter bw = new BufferedWriter (new OutputStreamWriter(System.out));
 
 	public static void main(String[] args) throws IOException {
+		//System.out.print("\n");
 		output= new ArrayList<String>();
 		booksPrices =new ArrayList<Integer>();		
 		
@@ -36,6 +37,7 @@ public class Main {
 			//Se debe usar el atajo ctrl + z para indicarle a la consola que termino la entrada.
 			books=br.readLine();					
 		}
+		
 		
 		System.out.println(showOut());
 		
@@ -79,8 +81,7 @@ public class Main {
 		for (int i=0;i<prices.size();i++) {
 			booksPrices.add(prices.get(i));
 		}	
-		//System.out.println(Arrays.toString(bookPrices));
-		
+		//System.out.println(Arrays.toString(bookPrices));		
 	}
 		
 	public static void findBooks() {
@@ -248,7 +249,12 @@ public class Main {
 	public static String showOut() {
 		String message="";
 		for (int i=0;i<output.size();i++) {
-			message+="\n"+output.get(i)+"\n";
+			if (output.get(i)==output.get(output.size()-1)) {
+				message+=output.get(i)+"\n";
+			}else {
+				message+=output.get(i)+"\n\n";
+			}
+			
 		}
 		return message;
 	}
